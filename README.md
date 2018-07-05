@@ -5,15 +5,10 @@
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 
-#### Integration & Verification Tests  
-
-[![CircleCI](https://circleci.com/gh/clinical-meteor/hl7-resource-composition/tree/master.svg?style=svg)](https://circleci.com/gh/clinical-meteor/hl7-resource-composition/tree/master)
-
 
 #### API Reference  
 
 This package implements the FHIR Compositions resource schema provided at [https://www.hl7.org/fhir/DSTU2/composition.html](https://www.hl7.org/fhir/DSTU2/composition.html).
-
 
 
 #### Installation  
