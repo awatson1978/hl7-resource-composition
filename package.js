@@ -1,6 +1,6 @@
 Package.describe({
   name: 'clinical:hl7-resource-composition',
-  version: '1.4.8',
+  version: '1.4.9',
   summary: 'HL7 FHIR Resource - Composition',
   git: 'https://github.com/clinical-meteor/hl7-resource-composition',
   documentation: 'README.md'
