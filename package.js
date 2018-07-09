@@ -1,6 +1,6 @@
 Package.describe({
   name: 'clinical:hl7-resource-composition',
-  version: '1.4.6',
+  version: '1.4.8',
   summary: 'HL7 FHIR Resource - Composition',
   git: 'https://github.com/clinical-meteor/hl7-resource-composition',
   documentation: 'README.md'
@@ -30,7 +30,7 @@ Package.onUse(function (api) {
   api.use('clinical:alert@2.1.3');
   
   api.addFiles('lib/Compositions.js', ['client', 'server']);
-  
+
   api.addFiles('server/rest.js', 'server');
   api.addFiles('server/initialize.js', 'server');
   api.addFiles('server/methods.js', 'server');
