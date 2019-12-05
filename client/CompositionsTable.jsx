@@ -58,7 +58,7 @@ let styles = {
 }
 
 
-flattenEncounter = function(encounter){
+flattenComposition = function(composition){
   let result = {
     _id: '',
     meta: '',
@@ -75,31 +75,31 @@ flattenEncounter = function(encounter){
     classCode: ''
   };
 
-  result._id =  get(encounter, 'id') ? get(encounter, 'id') : get(encounter, '_id');
+  result._id =  get(composition, 'id') ? get(composition, 'id') : get(composition, '_id');
 
 
-  if(get(encounter, 'subject.display', '')){
-    result.subject = get(encounter, 'subject.display', '');
+  if(get(composition, 'subject.display', '')){
+    result.subject = get(composition, 'subject.display', '');
   } else {
-    result.subject = get(encounter, 'subject.reference', '');
+    result.subject = get(composition, 'subject.reference', '');
   }
-  result.subjectId = get(encounter, 'subject.reference', '');
+  result.subjectId = get(composition, 'subject.reference', '');
 
-  result.status = get(encounter, 'status', '');
-  result.periodStart = moment(get(encounter, 'period.start', '')).format("YYYY-MM-DD hh:mm");
-  result.periodEnd = moment(get(encounter, 'period.end', '')).format("YYYY-MM-DD hh:ss");
-  result.reasonCode = get(encounter, 'reason[0].coding[0].code', '');
-  result.reasonDisplay = get(encounter, 'reason[0].coding[0].display', '');
-  result.typeCode = get(encounter, 'type[0].coding[0].code', '');
-  result.typeDisplay = get(encounter, 'type[0].coding[0].display', '');
+  result.status = get(composition, 'status', '');
+  result.periodStart = moment(get(composition, 'period.start', '')).format("YYYY-MM-DD hh:mm");
+  result.periodEnd = moment(get(composition, 'period.end', '')).format("YYYY-MM-DD hh:ss");
+  result.reasonCode = get(composition, 'reason[0].coding[0].code', '');
+  result.reasonDisplay = get(composition, 'reason[0].coding[0].display', '');
+  result.typeCode = get(composition, 'type[0].coding[0].code', '');
+  result.typeDisplay = get(composition, 'type[0].coding[0].display', '');
 
-  if(get(encounter, 'class.code')){
-    result.classCode = get(encounter, 'class.code', '');
-  } else if(get(encounter, 'class')){
-    result.classCode = get(encounter, 'class', '');
+  if(get(composition, 'class.code')){
+    result.classCode = get(composition, 'class.code', '');
+  } else if(get(composition, 'class')){
+    result.classCode = get(composition, 'class', '');
   }
 
-  let statusHistory = get(encounter, 'statusHistory', []);
+  let statusHistory = get(composition, 'statusHistory', []);
 
   result.statusHistory = statusHistory.length;
 
@@ -107,12 +107,12 @@ flattenEncounter = function(encounter){
 }
 
 
-// export class EncountersTable extends React.Component {
+// export class CompositionsTable extends React.Component {
 //   constructor(props) {
 //     super(props);
 //     this.state = {
 //       selected: [],
-//       encounters: []
+//       compositions: []
 //     }
 //   }
 //   getMeteorData() {
@@ -124,15 +124,15 @@ flattenEncounter = function(encounter){
 //         text: Glass.darkroom()
 //       },
 //       selected: [],
-//       encounters: []
+//       compositions: []
 //     };
 
 //     if(props.data){
 //       console.log('props.data', props.data);
 
 //       if(props.data.length > 0){              
-//         props.data.forEach(function(encounter){
-//           data.encounters.push(flattenEncounter(encounter));
+//         props.data.forEach(function(composition){
+//           data.compositions.push(flattenComposition(composition));
 //         });  
 //       }
 //     } else {
@@ -146,21 +146,21 @@ flattenEncounter = function(encounter){
 //         }
 //       }
 
-//       data.encounters = Encounters.find(query).map(function(encounter){
-//         return flattenEncounter(encounter);
+//       data.compositions = Compositions.find(query).map(function(composition){
+//         return flattenComposition(composition);
 //       });
 //     }
 
-//     if(process.env.NODE_ENV === "test") console.log("EncountersTable[data]", data);
+//     if(process.env.NODE_ENV === "test") console.log("CompositionsTable[data]", data);
 //     return data;
 //   }
 
 
 
 
-function EncountersTable(props){
-  console.log('EncountersTable.props', props);
-  // console.log('EncountersTable.props.encounters', props.encounters);
+function CompositionsTable(props){
+  console.log('CompositionsTable.props', props);
+  // console.log('CompositionsTable.props.compositions', props.compositions);
 
   const classes = useStyles();
 
@@ -189,9 +189,9 @@ function EncountersTable(props){
     return "";
   }
   function rowClick(id){
-    Session.set("selectedEncounterId", id);
-    Session.set('encounterPageTabIndex', 1);
-    Session.set('encounterDetailState', false);
+    Session.set("selectedCompositionId", id);
+    Session.set('compositionPageTabIndex', 1);
+    Session.set('compositionDetailState', false);
   }
   function renderActionIconsHeader(){
     if (!props.hideActionIcons) {
@@ -200,7 +200,7 @@ function EncountersTable(props){
       );
     }
   }
-  function renderActionIcons(encounter ){
+  function renderActionIcons(composition ){
     if (!props.hideActionIcons) {
       let iconStyle = {
         marginLeft: '4px', 
@@ -211,14 +211,14 @@ function EncountersTable(props){
 
       return (
         <TableCell className='actionIcons' style={{minWidth: '120px'}}>
-          <FaTags style={iconStyle} onClick={ onMetaClick.bind(encounter)} />
-          <GoTrashcan style={iconStyle} onClick={ removeRecord.bind(encounter._id)} />  
+          <FaTags style={iconStyle} onClick={ onMetaClick.bind(composition)} />
+          <GoTrashcan style={iconStyle} onClick={ removeRecord.bind(composition._id)} />  
         </TableCell>
       );
     }
   } 
   function removeRecord(_id){
-    console.log('Remove encounter ', _id)
+    console.log('Remove composition ', _id)
     if(props.onRemoveRecord){
       props.onRemoveRecord(_id);
     }
@@ -390,71 +390,71 @@ function EncountersTable(props){
 
 
   let tableRows = [];
-  let encountersToRender = [];
-  if(props.encounters){
-    if(props.encounters.length > 0){              
-      props.encounters.forEach(function(encounter){
-        encountersToRender.push(flattenEncounter(encounter));
+  let compositionsToRender = [];
+  if(props.compositions){
+    if(props.compositions.length > 0){              
+      props.compositions.forEach(function(composition){
+        compositionsToRender.push(flattenComposition(composition));
       });  
     }
   }
 
-  if(encountersToRender.length === 0){
-    console.log('No encounters to render');
+  if(compositionsToRender.length === 0){
+    console.log('No compositions to render');
     // footer = <TableNoData noDataPadding={ props.noDataMessagePadding } />
   } else {
-    for (var i = 0; i < encountersToRender.length; i++) {
+    for (var i = 0; i < compositionsToRender.length; i++) {
       if(props.multiline){
         tableRows.push(
-          <TableRow className="encounterRow" key={i} onClick={ rowClick(encountersToRender[i]._id)} >
+          <TableRow className="compositionRow" key={i} onClick={ rowClick(compositionsToRender[i]._id)} >
             { renderToggle() }
-            { renderActionIcons(encountersToRender[i]) }
-            { renderSubject(encountersToRender[i].subject)}
-            { renderClassCode(encountersToRender[i].classCode) }
-            { renderTypeCode(encountersToRender[i].typeCode) }
-            {/* <TableCell className='classCode' >{encountersToRender[i].classCode }</TableCell> */}
-            {/* <TableCell className='typeCode' >{encountersToRender[i].typeCode }</TableCell> */}
-            <TableCell className='typeDisplay' >{encountersToRender[i].typeDisplay }</TableCell>
-            { renderReasonCode(encountersToRender[i].reasonCode)}
-            { renderReason(encountersToRender[i].reasonDisplay)}
-            {/* <TableCell className='reasonCode' >{encountersToRender[i].reasonCode }</TableCell>
-            <TableCell className='reasonDisplay' >{encountersToRender[i].reasonDisplay }</TableCell> */}
+            { renderActionIcons(compositionsToRender[i]) }
+            { renderSubject(compositionsToRender[i].subject)}
+            { renderClassCode(compositionsToRender[i].classCode) }
+            { renderTypeCode(compositionsToRender[i].typeCode) }
+            {/* <TableCell className='classCode' >{compositionsToRender[i].classCode }</TableCell> */}
+            {/* <TableCell className='typeCode' >{compositionsToRender[i].typeCode }</TableCell> */}
+            <TableCell className='typeDisplay' >{compositionsToRender[i].typeDisplay }</TableCell>
+            { renderReasonCode(compositionsToRender[i].reasonCode)}
+            { renderReason(compositionsToRender[i].reasonDisplay)}
+            {/* <TableCell className='reasonCode' >{compositionsToRender[i].reasonCode }</TableCell>
+            <TableCell className='reasonDisplay' >{compositionsToRender[i].reasonDisplay }</TableCell> */}
 
-            { renderStatus(encountersToRender[i].status)}
-            { renderHistory(encountersToRender[i].statusHistory)}
+            { renderStatus(compositionsToRender[i].status)}
+            { renderHistory(compositionsToRender[i].statusHistory)}
 
-            {/* <TableCell className='status' >{encountersToRender[i].status }</TableCell>
-            <TableCell className='statusHistory' >{encountersToRender[i].statusHistory }</TableCell> */}
-            <TableCell className='periodStart' style={{minWidth: '140px'}}>{encountersToRender[i].periodStart }</TableCell>
-            <TableCell className='periodEnd' style={{minWidth: '140px'}}>{encountersToRender[i].periodEnd }</TableCell>
-            { renderBarcode(encountersToRender[i]._id)}
+            {/* <TableCell className='status' >{compositionsToRender[i].status }</TableCell>
+            <TableCell className='statusHistory' >{compositionsToRender[i].statusHistory }</TableCell> */}
+            <TableCell className='periodStart' style={{minWidth: '140px'}}>{compositionsToRender[i].periodStart }</TableCell>
+            <TableCell className='periodEnd' style={{minWidth: '140px'}}>{compositionsToRender[i].periodEnd }</TableCell>
+            { renderBarcode(compositionsToRender[i]._id)}
           </TableRow>
         );    
 
       } else {
         tableRows.push(
-          <TableRow className="encounterRow" key={i} onClick={ rowClick.bind(encountersToRender[i]._id)} >            
+          <TableRow className="compositionRow" key={i} onClick={ rowClick.bind(compositionsToRender[i]._id)} >            
             { renderToggle() }
-            { renderActionIcons(encountersToRender[i]) }
-            { renderSubject(encountersToRender[i].subject)}
-            { renderClassCode(encountersToRender[i].classCode) }
-            { renderTypeCode(encountersToRender[i].typeCode) }
-            {/* <TableCell className='classCode' >{ encountersToRender[i].classCode }</TableCell> */}
-            {/* <TableCell className='typeCode' >{ encountersToRender[i].typeCode }</TableCell> */}
-            <TableCell className='typeDisplay' >{ encountersToRender[i].typeDisplay }</TableCell>
-            { renderReasonCode(encountersToRender[i].reasonCode)}
-            { renderReason(encountersToRender[i].reasonDisplay)}
-            {/* <TableCell className='reasonCode' >{ encountersToRender[i].reasonCode }</TableCell>
-            <TableCell className='reasonDisplay' >{ encountersToRender[i].reasonDisplay }</TableCell> */}
+            { renderActionIcons(compositionsToRender[i]) }
+            { renderSubject(compositionsToRender[i].subject)}
+            { renderClassCode(compositionsToRender[i].classCode) }
+            { renderTypeCode(compositionsToRender[i].typeCode) }
+            {/* <TableCell className='classCode' >{ compositionsToRender[i].classCode }</TableCell> */}
+            {/* <TableCell className='typeCode' >{ compositionsToRender[i].typeCode }</TableCell> */}
+            <TableCell className='typeDisplay' >{ compositionsToRender[i].typeDisplay }</TableCell>
+            { renderReasonCode(compositionsToRender[i].reasonCode)}
+            { renderReason(compositionsToRender[i].reasonDisplay)}
+            {/* <TableCell className='reasonCode' >{ compositionsToRender[i].reasonCode }</TableCell>
+            <TableCell className='reasonDisplay' >{ compositionsToRender[i].reasonDisplay }</TableCell> */}
 
-            { renderStatus(encountersToRender[i].status)}
-            { renderHistory(encountersToRender[i].statusHistory)}
+            { renderStatus(compositionsToRender[i].status)}
+            { renderHistory(compositionsToRender[i].statusHistory)}
 
-            {/* <TableCell className='status' >{ encountersToRender[i].status }</TableCell>
-            <TableCell className='statusHistory' >{ encountersToRender[i].statusHistory }</TableCell> */}
-            <TableCell className='periodStart' style={{minWidth: '140px'}}>{ encountersToRender[i].periodStart }</TableCell>
-            <TableCell className='periodEnd' style={{minWidth: '140px'}}>{ encountersToRender[i].periodEnd }</TableCell>
-            { renderBarcode(encountersToRender[i]._id)}
+            {/* <TableCell className='status' >{ compositionsToRender[i].status }</TableCell>
+            <TableCell className='statusHistory' >{ compositionsToRender[i].statusHistory }</TableCell> */}
+            <TableCell className='periodStart' style={{minWidth: '140px'}}>{ compositionsToRender[i].periodStart }</TableCell>
+            <TableCell className='periodEnd' style={{minWidth: '140px'}}>{ compositionsToRender[i].periodEnd }</TableCell>
+            { renderBarcode(compositionsToRender[i]._id)}
           </TableRow>
         );    
       }
@@ -495,9 +495,9 @@ function EncountersTable(props){
   );
 }
 
-EncountersTable.propTypes = {
+CompositionsTable.propTypes = {
   barcodes: PropTypes.bool,
-  encounters: PropTypes.array,
+  compositions: PropTypes.array,
   query: PropTypes.object,
   paginationLimit: PropTypes.number,
   hideClassCode: PropTypes.bool,
@@ -521,4 +521,4 @@ EncountersTable.propTypes = {
 };
 
 
-export default EncountersTable; 
+export default CompositionsTable; 

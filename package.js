@@ -1,6 +1,6 @@
 Package.describe({
   name: 'clinical:hl7-resource-composition',
-  version: '1.4.10',
+  version: '1.4.11',
   summary: 'HL7 FHIR Resource - Composition',
   git: 'https://github.com/clinical-meteor/hl7-resource-composition',
   documentation: 'README.md'
@@ -22,9 +22,7 @@ Package.onUse(function (api) {
   
   api.addFiles('lib/Compositions.js', ['client', 'server']);
 
-  api.export('Measure');
-  api.export('Composition');
-  api.export('Compositionchema');
+  api.export('Compositions');
 
   api.mainModule('index.jsx', 'client');
 });
