@@ -400,11 +400,7 @@ function CompositionsTable(props){
   }
 
   if(compositionsToRender.length === 0){
-<<<<<<< HEAD:client/CompositionsTable.jsx
     logger.trace('CompositionsTable:  No compositions to render.');
-=======
-    console.log('No compositions to render');
->>>>>>> e612ec5a501651e700a301f7ab4cd369b0627f56:client/CompositionsTable.jsx
     // footer = <TableNoData noDataPadding={ props.noDataMessagePadding } />
   } else {
     for (var i = 0; i < compositionsToRender.length; i++) {
