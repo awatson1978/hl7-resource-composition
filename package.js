@@ -1,6 +1,6 @@
 Package.describe({
   name: 'clinical:hl7-resource-composition',
-  version: '1.4.10',
+  version: '1.5.0',
   summary: 'HL7 FHIR Resource - Composition',
   git: 'https://github.com/clinical-meteor/hl7-resource-composition',
   documentation: 'README.md'
@@ -28,3 +28,12 @@ Package.onUse(function (api) {
 
   api.mainModule('index.jsx', 'client');
 });
+
+Npm.depends({
+  "simpl-schema": "1.5.3",
+  "moment": "2.22.2",
+  "lodash": "4.17.4",
+  "react-icons": "3.2.2",
+  "material-fhir-ui": "0.9.18",
+  "winston": "3.2.1"
+})
